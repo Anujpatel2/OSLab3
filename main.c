@@ -28,24 +28,30 @@ typedef struct{
 		row++;
 	}
     
-    void *checkRow(parameters *rowParam){
-        int r = rowParam->row;
-        int c = rowParam->column;
-        
-        for(int i = 0; i < 9; i++){
-            for(int j = i+1; j < 9; j++){
-                if(sudoku[r][i] = sudoku[r][j]){
-                    printf("Sudoku is not valid");
-                    pthread_exit(NULL);
-                }
-                else{
-                    printf("Sudoku is valid");
-                }
-            }            
-        }
-    }
+void *checkRow(void* param) {
+	parameters *params = (parameters*) param;
+	int row = params->row;
+	int col = params->column;		
+	if (col != 0 || row > 8) {
+		fprintf(stderr, "Invalid row or column for row subsection! row=%d, col=%d\n", row, col);
+		pthread_exit(NULL);
+	}
 
-void* isColumnValid(void* colparam) {
+	int validityArray[9] = {0};
+	int i;
+	for (i = 0; i < 9; i++) {
+		int num = sudoku[row][i];
+		if (num < 1 || num > 9 || validityArray[num - 1] == 1) {
+			pthread_exit(NULL);
+		} else {
+			validityArray[num - 1] = 1;		
+		}
+	}
+	valid[9 + row] = 1;
+	pthread_exit(NULL);
+}
+
+void* checkColumn(void* colparam) {
 		parameters* params = (parameters*)colparam;
 		int r = params->row;
 		int c = params->column;
@@ -97,5 +103,44 @@ void *chcekSubGrid(paramenters *gridParam){
   
 int main(void)
 {
-    
+ pthread_t threads[num_threads];
+	
+	int threadIndex = 0;	
+	int i,j;
+	
+	for (i = 0; i < 9; i++) {
+		for (j = 0; j < 9; j++) {						
+			if (i%3 == 0 && j%3 == 0) {
+				parameters *data = (parameters *) malloc(sizeof(parameters));	
+				data->row = i;		
+				data->column = j;
+				pthread_create(&threads[threadIndex++], NULL, is3x3Valid, data); // 3x3 subsection threads
+			}
+			if (i == 0) {
+				parameters *columnData = (parameters *) malloc(sizeof(parameters));	
+				columnData->row = i;		
+				columnData->column = j;
+				pthread_create(&threads[threadIndex++], NULL, isColumnValid, columnData);	// column threads
+			}
+			if (j == 0) {
+				parameters *rowData = (parameters *) malloc(sizeof(parameters));	
+				rowData->row = i;		
+				rowData->column = j;
+				pthread_create(&threads[threadIndex++], NULL, isRowValid, rowData); // row threads
+			}
+		}
+	}
+
+	for (i = 0; i < num_threads; i++) {
+		pthread_join(threads[i], NULL);			
+	}
+
+	for (i = 0; i < num_threads; i++) {
+		if (valid[i] == 0) {
+			printf("Sudoku solution is invalid!\n");
+			return EXIT_SUCCESS;
+		}
+	}
+	printf("Sudoku solution is valid!\n");
+	return EXIT_SUCCESS;   
 }
