@@ -37,17 +37,17 @@ void *checkRow(void* param) {
 		pthread_exit(NULL);
 	}
 
-	int validityArray[9] = {0};
+	int valid[9] = {0};
 	int i;
 	for (i = 0; i < 9; i++) {
 		int num = sudoku[row][i];
-		if (num < 1 || num > 9 || validityArray[num - 1] == 1) {
+		if (num < 1 || num > 9 || valid[num - 1] == 1) {
 			pthread_exit(NULL);
 		} else {
-			validityArray[num - 1] = 1;		
+			valid[num - 1] = 1;		
 		}
 	}
-	valid[9 + row] = 1;
+	validity[9 + row] = 1;
 	pthread_exit(NULL);
 }
 
@@ -136,7 +136,7 @@ int main(void)
 	}
 
 	for (i = 0; i < num_threads; i++) {
-		if (valid[i] == 0) {
+		if (validity[i] == 0) {
 			printf("Sudoku solution is invalid!\n");
 			return EXIT_SUCCESS;
 		}
