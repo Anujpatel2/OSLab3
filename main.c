@@ -62,7 +62,7 @@ void* isColumnValid(void* colparam) {
 				pthread_exit(NULL);
 			}
 			else {
-				validityArray[n - 1] = 1;
+				valid[n - 1] = 1;
 			}
 		}
 		validity[18 + c] = 1;
