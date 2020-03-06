@@ -2,7 +2,7 @@
 Operating Systems Laboratory 3 - Check Sudoku Validity
 
 Contributors:
-    -Anuj Patel
+    -Anuj Patel 
     -Vraj Shah
-    -Preet Khasakia
-    -Harsh Ghoshwami
+    -Preet Khasakia 100653168
+    -Harshwardhan Goswami
