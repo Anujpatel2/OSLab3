@@ -36,6 +36,23 @@ typedef struct{
             }            
         }
     }
+
+void checkColumn(parameters* colParam) {
+		int r = colParam->row;
+		int c = colParam->column;
+
+		for (int i = 0; i < 9; i++) {
+			for (int j = i + 1; j < 9; j++) {
+				if (sudoku[i][c] = sudoku[j][c]) {
+					printf("Sudoku is not valid");
+					pthread_exit(NULL);
+				}
+				else {
+					printf("Sudoku is valid");
+				}
+			}
+		}
+	}
     
   
 int main(void)
