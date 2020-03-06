@@ -68,6 +68,31 @@ void* isColumnValid(void* colparam) {
 		validity[18 + c] = 1;
 		pthread_exit(NULL);
 	}
+
+
+void *chcekSubGrid(paramenters *gridParam){
+		int r = gridParam->row;
+        int c = gridParam->column;
+
+
+		if (r > 6 || r % 3 != 0 || c > 6 || c % 3 != 0) {
+			fprintf(stderr, "Invalid row or column for subgrid row=%d, col=%d\n", r, c);
+			pthread_exit(NULL);
+		}
+		int valid[9] = {0};
+		for (int i = r; i < r + 3; i++) {
+			for (int j = c; j < c + 3; j++) {
+				int n = sudoku[i][j];
+				if (n < 1 || n > 9 || valid[n - 1] == 1) {
+					pthread_exit(NULL);
+				} else {
+					valid[n - 1] = 1;		
+				}
+			}
+		}
+		validity[r + c/3] = 1;
+		pthread_exit(NULL);
+	}
     
   
 int main(void)
