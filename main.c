@@ -76,7 +76,7 @@ void* checkColumn(void* colparam) {
 	}
 
 
-void *chcekSubGrid(paramenters *gridParam){
+void *checkSubGrid(paramenters *gridParam){
 		int r = gridParam->row;
         int c = gridParam->column;
 
@@ -114,19 +114,19 @@ int main(void)
 				parameters *data = (parameters *) malloc(sizeof(parameters));	
 				data->row = i;		
 				data->column = j;
-				pthread_create(&threads[threadIndex++], NULL, is3x3Valid, data); // 3x3 subsection threads
+				pthread_create(&threads[threadIndex++], NULL, checkRow, data); // 3x3 subsection threads
 			}
 			if (i == 0) {
 				parameters *columnData = (parameters *) malloc(sizeof(parameters));	
 				columnData->row = i;		
 				columnData->column = j;
-				pthread_create(&threads[threadIndex++], NULL, isColumnValid, columnData);	// column threads
+				pthread_create(&threads[threadIndex++], NULL, checkColumn, columnData);	// column threads
 			}
 			if (j == 0) {
 				parameters *rowData = (parameters *) malloc(sizeof(parameters));	
 				rowData->row = i;		
 				rowData->column = j;
-				pthread_create(&threads[threadIndex++], NULL, isRowValid, rowData); // row threads
+				pthread_create(&threads[threadIndex++], NULL, checkSubGrid, rowData); // row threads
 			}
 		}
 	}
