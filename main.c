@@ -37,21 +37,28 @@ typedef struct{
         }
     }
 
-void checkColumn(parameters* colParam) {
-		int r = colParam->row;
-		int c = colParam->column;
+void* isColumnValid(void* colparam) {
+		parameters* params = (parameters*)colparam;
+		int r = params->row;
+		int c = params->column;
 
+		if (r != 0 || c > 8) {
+			fprintf(stderr, "The Column is Invalid! row=%d, col=%d\n", r, c);
+			pthread_exit(NULL);
+		}
+
+		int valid[9] = { 0 };
 		for (int i = 0; i < 9; i++) {
-			for (int j = i + 1; j < 9; j++) {
-				if (sudoku[i][c] = sudoku[j][c]) {
-					printf("Sudoku is not valid");
-					pthread_exit(NULL);
-				}
-				else {
-					printf("Sudoku is valid");
-				}
+			int n = sudoku[i][c];
+			if (n < 1 || n > 9 || valid[n - 1] == 1) {
+				pthread_exit(NULL);
+			}
+			else {
+				validityArray[n - 1] = 1;
 			}
 		}
+		valid[18 + c] = 1;
+		pthread_exit(NULL);
 	}
     
   
