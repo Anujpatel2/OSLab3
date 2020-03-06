@@ -26,8 +26,14 @@ typedef struct{
         
     }
     
-    void checkColumn(){
-        
+    void checkColumn(void* param){
+		parameters* params = (parameters*)param;
+		int row = params->row;
+		int col = params->column;
+
+		if (row!=0 || col>8) {
+
+		}
     }
     
     void checkSubGrid(){
