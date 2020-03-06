@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#define num_threads 27
+
+int validity[num_threads] = { 0 };
+
 
 typedef struct{
     int row;
@@ -57,7 +61,7 @@ void* isColumnValid(void* colparam) {
 				validityArray[n - 1] = 1;
 			}
 		}
-		valid[18 + c] = 1;
+		validity[18 + c] = 1;
 		pthread_exit(NULL);
 	}
     
